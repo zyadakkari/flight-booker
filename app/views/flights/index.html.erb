@@ -7,33 +7,73 @@
     <title>Flights</title>
 </head>
 <body>
-    <div class="row py-5">
-        <div class="col-lg-4 mx-auto">
-            <section class="d-flex justify-content-center mt-5 mb-5">
-                <span class="text-capitalize fw-bold bg-light px-2 py-1 rounded">
-                    Search Flights
-                </span>
-            </section>
-
-            <%= form_with url: search_path, method: :get do |f| %>
-                <div class="field mt-5 mb-5 bg-dark">
-                    <%= f.collection_select :departure_airport_id, Airport.all, :id, :code, { prompt: "Departure Airport" } ,  { class: "form-control py-2" } %>
-                </div>
-                <div class="field mt-5 mb-5">
-                    <%= f.collection_select :arrival_airport_id, Airport.all, :id, :code, { prompt: "Arrival Airport" } ,  { class: "form-control py-2" } %>
-                </div>
-                <div class="field mt-5 mb-5">
-                    <%= f.select :number_of_passengers, options_for_select([[1,1], [2,2], [3,3], [4,4]]), { prompt: "Number of passengers" } ,  { class: "form-control py-2" } %>
-                </div>
-
-                <!-- <div class="field mt-5 mb-5"> -->
-                    <%# <%= f.collection_select :flight_datetime, Flight.select(:flight_datetime).distinct.order(:flight_datetime), :id, :flight_datetime, { prompt: "Departure date" } ,  { class: "form-control py-2" } %> %>
-                <!-- </div> -->
-                <div class="actions mt-3 mb-5">
-                    <%= f.submit "Search", class: "form-control py-2 btn btn-success fw-bold shadow" %>
-                </div>
-            <% end %>
+    <div class="container-sm">
+        <%= form_with url: flights_path, method: :get do |f| %>
+        <div class="my-2 card">
+            <div class="card-body">
+                <h5 class="card-title">Locations</h5>
+                <div class="row"></div>
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="mb-2">
+                <%= f.collection_select :departure_airport_id, Airport.all, :id, :code, { prompt: "Origin" } %>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="mb-2">
+                <%= f.collection_select :arrival_airport_id, Airport.all, :id, :code, { prompt: "Destination" } %>
+            </div>
+        </div>
+    </div>
+
+
+                <div>
+                    <%= f.select :number_of_passengers, options_for_select([[1,1], [2,2], [3,3], [4,4]]), { prompt: "Number of passengers" } %>
+                </div>
+                <div>
+                    <%= f.collection_select :flight_datetime, Flight.all.distinct.order(:flight_datetime), :flight_datetime, :flight_datetime, { prompt: "Departure date" } %>
+                </div>
+                <div>
+                    <%= f.submit "Search"%>
+                </div>
+            <% end %>
+
+        <br>
+        <div class="row">
+        <% if @flights %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Origin</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Select Flight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @flights.each do |flight| %>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td><%= flight.departure_airport.code %></td>
+                            <td><%= flight.arrival_airport.code %></td>
+                            <td><%= flight.flight_datetime.strftime("%d/%m/%Y") %></td>
+                            <td><%= flight.flight_duration.strftime("%H:%M") %></td>
+                            <td><%= button_to 'Book Flight',
+                                    new_booking_path,
+                                    method: :get,
+                                    params: { flight_id: flight.id, number_of_passengers: params[:number_of_passengers] } %>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% end %>
+        </div>
+    
 </body>
 </html>

@@ -14,6 +14,9 @@ gem "pg", "~> 1.1"
 
 gem 'bootstrap-sass'
 
+
+
+gem "letter_opener", group: :development
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 

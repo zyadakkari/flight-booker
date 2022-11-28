@@ -1,19 +1,7 @@
 class FlightsController < ApplicationController
     def index
-        if params[:flight].blank?
-            return
-        else
-            @flights = params[:flight]
-        end
+        @flights = Flight.all
+        @flights = Flight.where(:departure_airport_id => params[:departure_airport_id], :arrival_airport_id => params[:arrival_airport_id], :flight_datetime => params[:flight_datetime])
     end
-
-    private
-
-    def flight_params
-        params.require(:flight).permit(:departure_airport_id, :arrival_airport_id)
-    end
-
-    def search_params
-        params.require(:flight).permit(:departure_airport, :arrival_airport, :number_of_passengers)
-    end
+    
 end

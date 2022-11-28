@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Booking</title>
+</head>
+<body>
+    <div class="fluid">
+        <%= form_for @booking do |f| %>
+            <div>
+                <%= f.label :flight_id %>
+                <%= f.text_field :flight_id, :value => params[:flight_id] %>
+            </div>
+            <div>
+                <%= f.label :number_of_passengers %>
+                <%= f.text_field :number_of_passengers, :value => params[:number_of_passengers] %>
+            </div>
+            <%= f.fields_for :passengers do |f_pass| %>
+                <%= f_pass.hidden_field :id, value:nil %>
+            <div>
+                <%= f_pass.label :name %>
+                <%= f_pass.text_field :name %>
+            </div>
+            <div>
+                <%= f_pass.label :email %>
+                <%= f_pass.text_field :email %>
+            </div>
+            <% end %>
+            <div>
+                <%= f.submit %>
+            </div>
+        <% end %>
+    </div>
+</body>
+</html>
